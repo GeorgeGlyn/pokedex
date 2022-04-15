@@ -1,17 +1,25 @@
-import { AppBar } from '@mui/material';
-import { BrowserRouter as Router, Route, } from 'react-router-dom';
-import './App.css';
-import AppNavigator from './components/AppNavigator';
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom"
 import Pokedex from './components/Pokedex';
+import AppNavigator from './components/AppNavigator';
+import './App.css';
+import PokemonDetails from "./components/PokemonDetails";
+import { Provider } from "react-redux";
+import { store, persistor } from "./redux/store";
+import { PersistGate } from "redux-persist/integration/react";
 
 function App() {
   return (
-    <div className="App">
-      <Router>
-        <AppNavigator />
-        <Route path='/' element={<Pokedex />} />
-      </Router>
-    </div>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <Router>
+          <AppNavigator />
+          <Routes>
+            <Route exact path="/" element={<Pokedex />} />
+            <Route exact path="/pokemon/:id" element={<PokemonDetails />} />
+          </Routes>
+        </Router>
+      </PersistGate>
+    </Provider>
   );
 }
 

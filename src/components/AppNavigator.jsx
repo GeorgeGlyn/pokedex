@@ -1,12 +1,9 @@
 import { AppBar, Toolbar, Typography } from '@mui/material'
-import { makeStyles } from "@mui/material/styles";
 import React from 'react'
+import { makeStyles } from '@mui/styles'
 import { Link } from 'react-router-dom'
 
 const useStyles = makeStyles((theme) => ({
-    AppBar: {
-        backgroundColor: "black"
-    },
     Link: {
         textDecoration: "none"
     },
@@ -14,19 +11,19 @@ const useStyles = makeStyles((theme) => ({
         cursor: "pointer",
         color: "white"
     }
+
 }))
 
-
-function AppNavigator() {
+export default function AppNavigator() {
     const classes = useStyles()
+
     return (
-        <AppBar position='fixed' className={classes.AppBar}>
+        <AppBar position='fixed' sx={{ bgcolor: "black" }} >
             <Toolbar>
                 <Link to="/" className={classes.Link}>
                     <Typography className={classes.title} variant="h6">Pokedex</Typography>
                 </Link>
             </Toolbar>
-        </AppBar>)
+        </AppBar>
+    )
 }
-
-export default AppNavigator
