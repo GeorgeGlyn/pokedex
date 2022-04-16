@@ -5,15 +5,20 @@ const initialData = {
 }
 
 const pokemonReducer = (state = initialData, action) => {
-    switch (action.type) {
+    const { payload, type } = action
+
+    switch (type) {
         case TOGGLE_FAVORITE:
-            let pokemon = action.payload;
-            let pokemonFavorite = state.favorites.find((favPokemon) => pokemon.id === favPokemon.id);
+            let pokemon = payload;
+            let pokemonFavorite = state.favorites.find((favPokemon) => {
+                console.log("🚀 ~ file: reducer.js ~ line 14 ~ pokemonReducer ~ favPokemon", favPokemon)
+                return pokemon?.id === favPokemon?.id
+            });
             return {
                 ...state,
                 favorites: pokemonFavorite ?
-                    [...state.favorites.filter((pokemon) => pokemon.id != pokemonFavorite.id)] :
-                    [...state.favorites, action.payload],
+                    [...state.favorites.filter((pokemon) => pokemon?.id !== pokemonFavorite?.id)] :
+                    [...state.favorites, payload],
             };
 
         default:

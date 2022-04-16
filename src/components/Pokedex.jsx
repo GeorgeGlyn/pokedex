@@ -17,9 +17,10 @@ const useStyle = makeStyles((theme) => ({
 export default function Pokedex() {
     const [pokemonData, setPokemonData] = useState(null)
     const classes = useStyle()
+    const [currentOffset, setCurrentOffset] = useState(18)
 
     useEffect(() => {
-        axios.get(POKEMON_API + "?limit=80").then((response) => {
+        axios.get(POKEMON_API + `?limit=${currentOffset}`).then((response) => {
             if (response.status >= 200 && response.status < 300) {
                 const { results } = response.data
                 let newPokemonData = []
@@ -35,9 +36,22 @@ export default function Pokedex() {
                 });
                 setPokemonData(newPokemonData)
             }
-        })
-    }, [])
-    
+        }).catch(err => console.error(err))
+    }, [currentOffset])
+
+    const scrollToEnd = () => {
+        setCurrentOffset(currentOffset + 18)
+    }
+
+    window.onscroll = function () {
+        if (window.innerHeight + document.documentElement.scrollTop >= document.documentElement.offsetHeight) {
+            scrollToEnd();
+        } else {
+            console.log(`${window.innerHeight + document.documentElement.scrollTop}`)
+        }
+    }
+
+
     return (
         <Box>
             {pokemonData ?

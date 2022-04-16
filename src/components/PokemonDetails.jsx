@@ -9,6 +9,94 @@ import { connect } from 'react-redux'
 import { toggleFavorite } from '../redux/actions'
 
 
+
+function favoriteChecker(pokemonData, props) {
+    let found = false
+    props.favorites?.map((p) => {
+        if (p?.id === pokemonData?.id) {
+            found = true
+        }
+    })
+    return found
+}
+
+const PokemonDetails = (props) => {
+    const [pokemonData, setPokemonData] = useState(null)
+    const { id } = useParams()
+    const classes = useStyle()
+    useEffect(() => {
+        if (!pokemonData) {
+            axios.get(POKEMON_API + "/" + id).then((response) => {
+                if (response.status >= 200 && response.status < 300) {
+
+                    let pokemonObject = {
+                        ...response.data,
+                        ...{ image: IMAGE_API + id + ".png" },
+                    }
+
+                    setPokemonData(pokemonObject)
+                }
+            })
+        }
+    }, [pokemonData])
+
+    return (
+        pokemonData ?
+            <Box>
+                <Box className={classes.pokedexContainer}>
+                    <Typography variant='h1' className={classes.textTitle}>
+                        {pokemonData.name}
+                    </Typography>
+                    <img className={classes.pokemonImage} src={pokemonData.image} />
+                    <Box className={classes.pokemonInfoContainer}>
+                        <hr className={classes.seperator} />
+                        <Grid container >
+                            <Grid item md={1}>
+                                <Button className={classes.favorite} onClick={() => props.toggleFavorite(pokemonData)}>
+                                    <FavoriteIcon style={{ color: favoriteChecker(pokemonData, props) ? "red" : "white", fontSize: 50 }} />
+                                </Button>
+                            </Grid>
+                            <Grid item md={2}>
+                                <Typography className={classes.text}>
+                                    Name
+                                    <br />
+                                    {pokemonData.name}
+                                </Typography>
+                            </Grid>
+                            <Grid item md={2}>
+                                <Typography className={classes.text}>
+                                    Height
+                                    <br />
+                                    {pokemonData.height}m
+                                </Typography>
+                            </Grid>
+                            <Grid item md={2}>
+                                <Typography className={classes.text}>
+                                    Weight
+                                    <br />
+                                    {pokemonData.weight}kg
+                                </Typography>
+                            </Grid>
+                            {pokemonData.types.map((pokemonType, index) => {
+                                const { name } = pokemonType.type
+                                return (<Grid item md={2} key={index.toString()}>
+                                    <Typography className={classes.text}>
+                                        Type
+                                        <br />
+                                        {name}
+                                    </Typography>
+                                </Grid>)
+
+                            })}
+                        </Grid>
+                    </Box>
+                </Box>
+            </Box> : <CircularProgress style={{ marginTop: 100 }} />
+
+    )
+
+}
+
 const useStyle = makeStyles((theme) => ({
 
     pokedexContainer: {
@@ -53,95 +141,12 @@ const useStyle = makeStyles((theme) => ({
     }
 }))
 
-function favoriteChecker(pokemon, props) {
-    let found = false
-    props.favorites?.map((p) => {
-        if (p.id === pokemon.id) {
-            found = true
-        }
-    })
-    return found
-}
-
-function PokemonDetails(props) {
-    const [pokemonData, setPokemonData] = useState(null)
-    const { id } = useParams()
-    const classes = useStyle()
-    useEffect(() => {
-        axios.get(POKEMON_API + "/" + id).then((response) => {
-            if (response.status >= 200 && response.status < 300) {
-                let pokemonObject = {
-                    pokemon: response.data,
-                    image: IMAGE_API + id + ".png",
-                }
-                setPokemonData(pokemonObject)
-            }
-        })
-    }, [pokemonData])
-
-    return (
-        pokemonData ?
-            <Box>
-                <Box className={classes.pokedexContainer}>
-                    <Typography variant='h1' className={classes.textTitle}>
-                        {pokemonData.pokemon.name}
-                    </Typography>
-                    <img className={classes.pokemonImage} src={pokemonData.image} />
-                    <Box className={classes.pokemonInfoContainer}>
-                        <hr className={classes.seperator} />
-                        <Grid container >
-                            <Grid item md={1}>
-                                <Button className={classes.favorite} onClick={() => props.toggleFavorite(pokemonData.pokemon)}>
-                                    <FavoriteIcon style={{ color: favoriteChecker(pokemonData.pokemon, props) ? "red" : "white", fontSize: 50 }} />
-                                </Button>
-                            </Grid>
-                            <Grid item md={2}>
-                                <Typography className={classes.text}>
-                                    Name
-                                    <br />
-                                    {pokemonData.pokemon.name}
-                                </Typography>
-                            </Grid>
-                            <Grid item md={2}>
-                                <Typography className={classes.text}>
-                                    Height
-                                    <br />
-                                    {pokemonData.pokemon.height}m
-                                </Typography>
-                            </Grid>
-                            <Grid item md={2}>
-                                <Typography className={classes.text}>
-                                    Weight
-                                    <br />
-                                    {pokemonData.pokemon.weight}kg
-                                </Typography>
-                            </Grid>
-                            {pokemonData.pokemon.types.map((pokemonType) => {
-                                const { name } = pokemonType.type
-                                return (<Grid item md={2}>
-                                    <Typography className={classes.text}>
-                                        Type
-                                        <br />
-                                        {name}
-                                    </Typography>
-                                </Grid>)
-
-                            })}
-                        </Grid>
-                    </Box>
-                </Box>
-            </Box> : <CircularProgress style={{ marginTop: 100 }} />
-
-    )
-
-}
-
 const mapStateToProps = (state) => ({
     favorites: state.favorites
 })
 
 const mapDispatchToProps = (dispatch) => ({
-    toggleFavorite: (pokemon) => dispatch(toggleFavorite(pokemon))
+    toggleFavorite: (pokemonData) => dispatch(toggleFavorite(pokemonData))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(PokemonDetails)
