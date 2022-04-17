@@ -11,7 +11,6 @@ const pokemonReducer = (state = initialData, action) => {
         case TOGGLE_FAVORITE:
             let pokemon = payload;
             let pokemonFavorite = state.favorites.find((favPokemon) => {
-                console.log("🚀 ~ file: reducer.js ~ line 14 ~ pokemonReducer ~ favPokemon", favPokemon)
                 return pokemon?.id === favPokemon?.id
             });
             return {

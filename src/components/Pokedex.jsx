@@ -14,7 +14,7 @@ const useStyle = makeStyles((theme) => ({
     }
 }))
 
-export default function Pokedex() {
+function Pokedex() {
     const [pokemonData, setPokemonData] = useState(null)
     const classes = useStyle()
     const [currentOffset, setCurrentOffset] = useState(18)
@@ -22,15 +22,15 @@ export default function Pokedex() {
     useEffect(() => {
         axios.get(POKEMON_API + `?limit=${currentOffset}`).then((response) => {
             if (response.status >= 200 && response.status < 300) {
-                const { results } = response.data
+                const { results: pokemons } = response?.data
                 let newPokemonData = []
 
-                results.forEach((pokemon, index) => {
+                pokemons.map((pokemon, index) => {
                     index++
                     let pokemonObject = {
                         id: index,
                         url: IMAGE_API + index + ".png",
-                        name: pokemon.name
+                        name: pokemon?.name
                     }
                     newPokemonData.push(pokemonObject)
                 });
@@ -44,10 +44,10 @@ export default function Pokedex() {
     }
 
     window.onscroll = function () {
-        if (window.innerHeight + document.documentElement.scrollTop >= document.documentElement.offsetHeight) {
+        if (window.innerHeight + document.documentElement.scrollTop + 1 >= document.scrollingElement.scrollHeight) {
             scrollToEnd();
         } else {
-            console.log(`${window.innerHeight + document.documentElement.scrollTop}`)
+            // console.log(`${window.innerHeight + document.documentElement.scrollTop}`)
         }
     }
 
@@ -57,9 +57,13 @@ export default function Pokedex() {
             {pokemonData ?
                 <Grid className={classes.pokedexContainer} container spacing={2}>
                     {pokemonData.map((pokemon) => {
-                        return (<PokemonCard key={pokemon.id} pokemon={pokemon} image={pokemon.url} />)
+                        return (<PokemonCard key={pokemon?.id} pokemon={pokemon} image={pokemon?.url} />)
                     })}
                 </Grid> : <CircularProgress style={{ marginTop: 100 }} />}
         </Box>
     )
+
 }
+
+export default Pokedex
+
