@@ -4,6 +4,7 @@ import axios from "axios"
 import { IMAGE_API, POKEMON_API } from '../config/constants'
 import PokemonCard from './PokemonCard'
 import { makeStyles } from '@mui/styles'
+import { Formik } from 'formik'
 
 const useStyle = makeStyles((theme) => ({
     pokedexContainer: {
@@ -18,6 +19,7 @@ function Pokedex() {
     const [pokemonData, setPokemonData] = useState(null)
     const classes = useStyle()
     const [currentOffset, setCurrentOffset] = useState(18)
+    const [searchData, setSearchData] = useState("")
 
     useEffect(() => {
         axios.get(POKEMON_API + `?limit=${currentOffset}`).then((response) => {
@@ -53,10 +55,56 @@ function Pokedex() {
 
 
     return (
-        <Box>
+        <Box style={{ marginTop: 65 }}>
+            <Formik
+                initialValues={{ search: '' }}
+                validate={values => {
+                    const errors = {};
+                    if (values.search.length < 3) {
+                        errors.search = "More than 3 characters required"
+                    }
+
+                    return errors;
+                }}
+                onSubmit={(values, { setSubmitting }) => {
+                    setSearchData(values.search)
+                    setSubmitting(false);
+
+                }}
+            >
+                {({
+                    values,
+                    errors,
+                    touched,
+                    handleChange,
+                    handleSubmit,
+                    isSubmitting,
+                    /* and other goodies */
+                }) => (
+                    <form onSubmit={handleSubmit}>
+
+                        <input
+                            type="text"
+                            name="search"
+                            onChange={handleChange}
+                            value={values.search}
+                        />
+                        {errors.search && touched.search && errors.search}
+                        <button type="submit" disabled={isSubmitting}>
+                            Submit
+                        </button>
+                    </form>
+                )}
+            </Formik>
             {pokemonData ?
                 <Grid className={classes.pokedexContainer} container spacing={2}>
-                    {pokemonData.map((pokemon) => {
+                    {pokemonData.filter(pokemon => {
+                        if (searchData === "") {
+                            return pokemon
+                        } else if (pokemon?.name.includes(searchData)) {
+                            return pokemon
+                        }
+                    }).map((pokemon) => {
                         return (<PokemonCard key={pokemon?.id} pokemon={pokemon} image={pokemon?.url} />)
                     })}
                 </Grid> : <CircularProgress style={{ marginTop: 100 }} />}

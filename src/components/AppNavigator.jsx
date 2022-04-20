@@ -2,7 +2,6 @@ import { AppBar, Toolbar, Typography } from '@mui/material'
 import React from 'react'
 import { makeStyles } from '@mui/styles'
 import { Link } from 'react-router-dom'
-import SearchBox from './SearchBox'
 
 const useStyles = makeStyles((theme) => ({
     Link: {
@@ -31,7 +30,6 @@ export default function AppNavigator() {
                 <Link to="/favorites" className={classes.Link}>
                     <Typography className={classes.favorites} variant="h6" sx={{ marginLeft: 2, marginRight: 2 }}>Favorites</Typography>
                 </Link>
-                <SearchBox />
 
             </Toolbar>
         </AppBar>
