@@ -6,14 +6,6 @@ import PokemonCard from './PokemonCard'
 import { makeStyles } from '@mui/styles'
 import { Formik } from 'formik'
 
-const useStyle = makeStyles((theme) => ({
-    pokedexContainer: {
-        textAlign: "center",
-        padding: "75px 10px 0px 10px",
-        backgroundColor: "rgb(68,68,68)"
-
-    }
-}))
 
 function Pokedex() {
     const [pokemonData, setPokemonData] = useState(null)
@@ -55,8 +47,8 @@ function Pokedex() {
 
 
     return (
-        <Box style={{ marginTop: 65 }}>
-            <Formik
+        <Box className={classes.pokedexContainer}>
+            <Formik 
                 initialValues={{ search: '' }}
                 validate={values => {
                     const errors = {};
@@ -112,6 +104,15 @@ function Pokedex() {
     )
 
 }
+
+const useStyle = makeStyles((theme) => ({
+    pokedexContainer: {
+        textAlign: "center",
+        padding: "75px 10px 0px 10px",
+        backgroundColor: "rgb(68,68,68)"
+
+    }
+}))
 
 export default Pokedex
 
