@@ -3,20 +3,7 @@ import React from 'react'
 import { makeStyles } from '@mui/styles'
 import { Link } from 'react-router-dom'
 
-const useStyles = makeStyles((theme) => ({
-    Link: {
-        textDecoration: "none"
-    },
-    title: {
-        cursor: "pointer",
-        color: "white"
-    },
-    favorites: {
-        cursor: "pointer",
-        color: "white"
-    }
 
-}))
 
 export default function AppNavigator() {
     const classes = useStyles()
@@ -35,3 +22,18 @@ export default function AppNavigator() {
         </AppBar>
     )
 }
+
+const useStyles = makeStyles((theme) => ({
+    Link: {
+        textDecoration: "none"
+    },
+    title: {
+        cursor: "pointer",
+        color: "white"
+    },
+    favorites: {
+        cursor: "pointer",
+        color: "white"
+    }
+
+}))

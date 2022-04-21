@@ -26,7 +26,7 @@ function Pokedex() {
                         url: IMAGE_API + index + ".png",
                         name: pokemon?.name
                     }
-                    newPokemonData.push(pokemonObject)
+                    return newPokemonData.push(pokemonObject)
                 });
                 setPokemonData(newPokemonData)
             }
@@ -48,7 +48,7 @@ function Pokedex() {
 
     return (
         <Box className={classes.pokedexContainer}>
-            <Formik 
+            <Formik
                 initialValues={{ search: '' }}
                 validate={values => {
                     const errors = {};
@@ -83,7 +83,7 @@ function Pokedex() {
                         />
                         {errors.search && touched.search && errors.search}
                         <button type="submit" disabled={isSubmitting}>
-                            Submit
+                            Search
                         </button>
                     </form>
                 )}
@@ -110,6 +110,11 @@ const useStyle = makeStyles((theme) => ({
         textAlign: "center",
         padding: "75px 10px 0px 10px",
         backgroundColor: "rgb(68,68,68)"
+    },
+    search: {
+        padding: "75px 10px 0px 10px",
+        backgroundColor: "rgb(68,68,68)",
+        color: "white",
 
     }
 }))

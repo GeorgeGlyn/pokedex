@@ -4,16 +4,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import PokemonCard from './PokemonCard'
 
-const useStyles = makeStyles((theme) => ({
-    pokedoxContainer: {
-        // backgroundColor: "rgb(68,68,68)"
 
-        textAlign: "center",
-        height: "100vh",
-        padding: "75px 10px 0px 10px",
-        backgroundColor: "rgb(68,68,68)"
-    }
-}))
 
 export const Favorites = (props) => {
     const classes = useStyles()
@@ -34,6 +25,17 @@ export const Favorites = (props) => {
         </Box>
     )
 }
+
+const useStyles = makeStyles((theme) => ({
+    pokedoxContainer: {
+        // backgroundColor: "rgb(68,68,68)"
+
+        textAlign: "center",
+        height: "100vh",
+        padding: "75px 10px 0px 10px",
+        backgroundColor: "rgb(68,68,68)"
+    }
+}))
 
 const mapStateToProps = (state) => ({
     favorites: state.favorites
